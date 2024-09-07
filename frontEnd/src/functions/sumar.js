@@ -8,7 +8,7 @@ export const generarNumeroRandom = (numMax, numMin) =>{
 export const evaluarResultado = (num1, num2, operador, respuesta) =>{
 
     let resultado = eval(`${num1} ${operador} ${num2}`)
-    console.log(resultado);
+    console.log(resultado == respuesta);
     
     if(resultado == respuesta){
         return true

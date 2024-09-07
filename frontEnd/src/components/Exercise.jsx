@@ -3,7 +3,8 @@ import { evaluarResultado, generarNumeroRandom } from "../functions/sumar";
 
 function Exercise({ onCorrect, contador }) {
   //Definir el operador a utilizar
-  const [operadores, setOperadores] = useState(["+", "-", "*", "/"]);
+  const operadoresIniciales = ["+", "-", "*", "/"];
+  const [operadores, setOperadores] = useState(operadoresIniciales);
 
   //Definir numeros que se manejan
   const [num1, setNum1] = useState(" ");
@@ -14,25 +15,30 @@ function Exercise({ onCorrect, contador }) {
 
   const [dificultad, setDificultad] = useState("Facil");
   const [userAnswer, setUserAnswer] = useState("");
-  const [contadorInt, setContadorInt] = useState(0);
+  //const [contadorInt, setContadorInt] = useState(1);
 
   useEffect(()=>{
-    generarRespuesta();
-  },[contador])
+    generarRespuesta(true);
+  },[])
 
-  const generarRespuesta = (incorrect) => {
-    let defOperador;
+  // Actualiza operadores al cambiar la dificultad
+  useEffect(() => {
+    setOperadores(operadoresIniciales); // Restablecer operadores al cambiar la dificultad
+    generarRespuesta(true); // Generar una nueva operación
+  }, [dificultad]); // Se ejecuta al cambiar la dificultad
+
+  const generarRespuesta = (correct) => {
+
+    if (correct || operadores.length === 0) {
+      setOperadores(operadoresIniciales);
+      defOperador();
+    }
+
     switch (dificultad) {
 
       case "Facil":
         setNum1(generarNumeroRandom(10, 1));
         setNum2(generarNumeroRandom(10, 1));
-        
-        defOperador = operadores[Math.floor(Math.random() * operadores.length)];
-      
-        setOperador(defOperador);
-        //Eliminar operador
-        incorrect && borrarValorOperador(defOperador);
 
         setNum3("?");
 
@@ -40,16 +46,11 @@ function Exercise({ onCorrect, contador }) {
 
       case "Medio":
         setNum1(generarNumeroRandom(99, 11));
+        if (operadores == "/"){
+          setNum2(generarNumeroRandom(10, 1));  
+        }
         setNum2(generarNumeroRandom(99, 11));
         setNum3("?");
-
-        defOperador = operadores[Math.floor(Math.random() * operadores.length)];
-        console.log(defOperador);
-        
-        setOperador(defOperador);
-        //Eliminar operador
-        borrarValorOperador(defOperador);
-
 
       break;
 
@@ -57,63 +58,54 @@ function Exercise({ onCorrect, contador }) {
         setNum1(generarNumeroRandom(99, 11));
         setNum2("?");
         setNum3(generarNumeroRandom(99,11))
-        defOperador = operadores[Math.floor(Math.random() * operadores.length)];
-        console.log(defOperador);
         
-        setOperador(defOperador);
-        //Eliminar operador
-        borrarValorOperador(defOperador);
-
         break;
       default:
         break;
-    }
+    }    
+  };
+
+  const defOperador = () => {
+    let operator = operadores[Math.floor(Math.random() * operadores.length)];
+    setOperador(operator);
+    borrarValorOperador(operator);
   };
 
   const borrarValorOperador = (value) => {
-
-    let nuevoArray = operadores.filter(item => item !== value);
-    setOperadores(nuevoArray)
-
+    setOperadores(prevOperadores => prevOperadores.filter(item => item !== value));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let resultado;
 
-    //Revisar respuesta
-    if (dificultad == "Facil" || dificultad == "Medio") {
-      resultado = evaluarResultado(num1, num2, operador, userAnswer)
+    // Revisar respuesta
+    if (dificultad === "Facil" || dificultad === "Medio") {
+      resultado = evaluarResultado(num1, num2, operador, userAnswer);
     }
-    if (dificultad == "Dificil") {
-      resultado = evaluarResultado(num1, num3, operador,userAnswer)
+    if (dificultad === "Dificil") {
+      resultado = evaluarResultado(num1, num3, operador, userAnswer);
     }
-    console.log(resultado);
-    
-    //Si el resultado es correcto
-    if(resultado){
-      setContadorInt(contadorInt + 1)
-      onCorrect()
-    }
-    
-    console.log(contadorInt);
-    
-    cambiarDificultad()
-    setUserAnswer("")
 
+    // Si el resultado es correcto
+    if (resultado) {
+      onCorrect();
+      generarRespuesta(true);
+    } else {
+      generarRespuesta(false);
+    }
+
+    cambiarDificultad();
+    setUserAnswer("");
   };
 
-  const cambiarDificultad = ()=>{
-    
-    if (contadorInt == 3) {
-      setOperadores(["+", "-", "*", "/"])
-      setDificultad("Medio")
+  const cambiarDificultad = () => {
+    if (contador === 4) {
+      setDificultad("Medio");
+    } else if (contador === 8) {
+      setDificultad("Dificil");
     }
-    if (contadorInt == 8) {
-      setDificultad("Dificil")
-    }
-
-  }
+  };
 
   return (
     <div>
