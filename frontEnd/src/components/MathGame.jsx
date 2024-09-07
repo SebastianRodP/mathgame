@@ -10,11 +10,6 @@ function MathGame() {
     setHasFailed(false);
   };
 
-  const handleIncorrectAnswer = () => {
-    setCorrectCount(0);
-    setHasFailed(true);
-  };
-
   return (
     <div className="text-center">
       <h2 className="text-2xl font-bold mb-4">Responde las Operaciones</h2>
@@ -22,7 +17,7 @@ function MathGame() {
 
       <Exercise
         onCorrect={handleCorrectAnswer}
-        onIncorrect={handleIncorrectAnswer}
+        contador={correctCount}
       />
 
       {hasFailed && (

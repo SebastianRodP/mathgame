@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { evaluarResultado, generarNumeroRandom } from "../functions/sumar";
 
-function Exercise({ onCorrect, onIncorrect }) {
+function Exercise({ onCorrect, contador }) {
   //Definir el operador a utilizar
   const [operadores, setOperadores] = useState(["+", "-", "*", "/"]);
 
@@ -14,24 +14,25 @@ function Exercise({ onCorrect, onIncorrect }) {
 
   const [dificultad, setDificultad] = useState("Facil");
   const [userAnswer, setUserAnswer] = useState("");
+  const [contadorInt, setContadorInt] = useState(0);
 
   useEffect(()=>{
     generarRespuesta();
-  },[])
+  },[contador])
 
-  const generarRespuesta = () => {
+  const generarRespuesta = (incorrect) => {
     let defOperador;
     switch (dificultad) {
 
       case "Facil":
         setNum1(generarNumeroRandom(10, 1));
         setNum2(generarNumeroRandom(10, 1));
-
+        
         defOperador = operadores[Math.floor(Math.random() * operadores.length)];
       
         setOperador(defOperador);
         //Eliminar operador
-        borrarValorOperador(defOperador);
+        incorrect && borrarValorOperador(defOperador);
 
         setNum3("?");
 
@@ -79,25 +80,40 @@ function Exercise({ onCorrect, onIncorrect }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     let resultado;
+
     //Revisar respuesta
     if (dificultad == "Facil" || dificultad == "Medio") {
       resultado = evaluarResultado(num1, num2, operador, userAnswer)
     }
-
     if (dificultad == "Dificil") {
       resultado = evaluarResultado(num1, num3, operador,userAnswer)
     }
-
     console.log(resultado);
     
-
+    //Si el resultado es correcto
     if(resultado){
+      setContadorInt(contadorInt + 1)
       onCorrect()
-    }else{
-      onIncorrect()
     }
+    
+    console.log(contadorInt);
+    
+    cambiarDificultad()
+    setUserAnswer("")
 
   };
+
+  const cambiarDificultad = ()=>{
+    
+    if (contadorInt == 3) {
+      setOperadores(["+", "-", "*", "/"])
+      setDificultad("Medio")
+    }
+    if (contadorInt == 8) {
+      setDificultad("Dificil")
+    }
+
+  }
 
   return (
     <div>
