@@ -39,22 +39,25 @@ function Exercise({ onCorrect, onIncorrect }) {
   };
 
   return (
-    <div className="border-2 p-4 rounded-lg">
-      <h3 className="text-3xl mb-4">
+    <div className="p-6 rounded-lg bg-[#ede9fe] shadow-md flex flex-col items-center w-full max-w-md mx-auto">
+      <h3 className="text-7xl mb-4 font-bold">
         {num1} {operation} {num2} = ?
       </h3>
-      <form onSubmit={handleSubmit} className="flex flex-col justify-cente">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center w-full"
+      >
         <input
           type="number"
           step="0.01"
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
-          className="text-center text-2xl w-full py-2 border-b-2 border-gray-500 mb-4"
+          className="text-center text-3xl w-full py-3 border-b-2 border-gray-500 mb-4 rounded-md"
           placeholder="?"
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-lg text-2xl"
+          className="bg-[#a78bfa] text-white py-3 px-6 rounded-full text-2xl font-semibold shadow-lg hover:bg-[#8b5cf6] transition-colors"
         >
           Verificar
         </button>
