@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useSound from "use-sound";
 
 function Exercise({ onCorrect, onIncorrect }) {
   const operations = ["+", "-", "*", "/"];
@@ -9,17 +10,26 @@ function Exercise({ onCorrect, onIncorrect }) {
   );
   const [userAnswer, setUserAnswer] = useState("");
 
+  const [playCorrect] = useSound("/sounds/new_level_Correct.mp3", {
+    volume: 1,
+  });
+  const [playIncorrect] = useSound("/sounds/negative_incorrect.mp3", {
+    volume: 1,
+  });
+
   const correctAnswer = eval(`${num1} ${operation} ${num2}`).toFixed(2);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
       onCorrect();
-      generateNewExercise();
+      playCorrect();
     } else {
       onIncorrect();
+      playIncorrect();
     }
     setUserAnswer("");
+    generateNewExercise();
   };
 
   const generateNewExercise = () => {
@@ -29,7 +39,7 @@ function Exercise({ onCorrect, onIncorrect }) {
   };
 
   return (
-    <div>
+    <div className="border-2 border-gray-300 p-4 bg-gray-100 rounded-lg">
       <h3 className="text-3xl mb-4">
         {num1} {operation} {num2} = ?
       </h3>
@@ -42,7 +52,10 @@ function Exercise({ onCorrect, onIncorrect }) {
           className="text-center text-2xl w-20 py-2 border-b-2 border-gray-500 mb-4"
           placeholder="?"
         />
-        <button className="bg-blue-500 text-white py-2 px-4 rounded-lg text-2xl">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg text-2xl"
+        >
           Verificar
         </button>
       </form>

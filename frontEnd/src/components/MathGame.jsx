@@ -1,18 +1,28 @@
 import { useState } from "react";
 import Exercise from "./Exercise";
 
+import useSound from "use-sound";
+
 function MathGame() {
   const [correctCount, setCorrectCount] = useState(0);
   const [hasFailed, setHasFailed] = useState(false);
+  const [playCorrect] = useSound("../../public/sounds/new_level_Correct", {
+    volumen: 1,
+  });
+  const [playIncorrect] = useSound("../../public/sounds/negative_incorrect", {
+    volumen: 1,
+  });
 
   const handleCorrectAnswer = () => {
     setCorrectCount(correctCount + 1);
     setHasFailed(false);
+    playCorrect();
   };
 
   const handleIncorrectAnswer = () => {
     setCorrectCount(0);
     setHasFailed(true);
+    playIncorrect();
   };
 
   return (
