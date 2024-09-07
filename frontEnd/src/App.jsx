@@ -3,7 +3,6 @@ import Prueba from './pruebas'
 
 function App() {
 
-
   return (
       <Routes>
         <Route path='/prueba' element={<Prueba />} />
