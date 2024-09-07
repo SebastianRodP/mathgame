@@ -39,17 +39,17 @@ function Exercise({ onCorrect, onIncorrect }) {
   };
 
   return (
-    <div className="border-2 border-gray-300 p-4 bg-gray-100 rounded-lg">
+    <div className="border-2 p-4 rounded-lg">
       <h3 className="text-3xl mb-4">
         {num1} {operation} {num2} = ?
       </h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col justify-cente">
         <input
           type="number"
           step="0.01"
           value={userAnswer}
           onChange={(e) => setUserAnswer(e.target.value)}
-          className="text-center text-2xl w-20 py-2 border-b-2 border-gray-500 mb-4"
+          className="text-center text-2xl w-full py-2 border-b-2 border-gray-500 mb-4"
           placeholder="?"
         />
         <button

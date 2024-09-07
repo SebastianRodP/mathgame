@@ -26,7 +26,7 @@ function MathGame() {
   };
 
   return (
-    <div className="text-center">
+    <div className="text-center border-gray-300 p-4 bg-gray-100 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Responde las Operaciones</h2>
       <p className="text-xl mb-4">Respuestas correctas: {correctCount}</p>
 
